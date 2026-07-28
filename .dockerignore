@@ -1,0 +1,16 @@
+.git
+/vendor
+/node_modules
+/public/build
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+.env
+database/database.sqlite
+desktop-app/dist
+desktop-app/node_modules
+Dockerfile
+.dockerignore
+docker-entrypoint.sh

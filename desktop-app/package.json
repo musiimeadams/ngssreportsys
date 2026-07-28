@@ -1,0 +1,16 @@
+{
+  "name": "ngss-reports-desktop",
+  "version": "1.0.0",
+  "description": "Ngarama Girl's Secondary School E-Reports Desktop App",
+  "author": "MUSIIME ADAMZ",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . \"Ngarama E-Reports\" --platform=win32 --arch=x64 --icon=logo.ico --overwrite --out=dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-packager": "^17.1.2"
+  }
+}
