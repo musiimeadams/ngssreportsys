@@ -9,15 +9,10 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip opcache
 
-# Install Node.js 20
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Enable Apache modules
 RUN a2enmod rewrite headers expires
 
-# Write a clean Apache virtual host config with AllowOverride All
+# Write a clean Apache virtual host config
 RUN echo '<VirtualHost *:80>\n\
     ServerAdmin webmaster@localhost\n\
     DocumentRoot /var/www/html/public\n\
@@ -42,15 +37,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
 RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
-# Copy all project files
+# Copy all project files (includes pre-built public/build assets)
 COPY . .
 
 # Dump optimized autoloader
 RUN composer dump-autoload --optimize
-
-# Build frontend assets
-RUN npm ci
-RUN npm run build
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
