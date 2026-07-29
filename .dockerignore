@@ -11,6 +11,3 @@
 database/database.sqlite
 desktop-app/dist
 desktop-app/node_modules
-Dockerfile
-.dockerignore
-docker-entrypoint.sh

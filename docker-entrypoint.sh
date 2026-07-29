@@ -1,21 +1,16 @@
 #!/bin/sh
-
-# Exit immediately if a command exits with a non-zero status
 set -e
 
-# Cache configuration, routes, and views
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+echo "==> Caching Laravel configuration..."
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
 
-# Run migrations to set up database tables
-echo "Running database migrations..."
+echo "==> Running database migrations..."
 php artisan migrate --force
 
-# Seed default settings and admin account if needed
-echo "Running database seeds..."
+echo "==> Seeding default admin and school settings..."
 php artisan db:seed --force || true
 
-# Start Apache in the foreground
-echo "Starting Apache..."
+echo "==> Starting Apache..."
 exec apache2-foreground
