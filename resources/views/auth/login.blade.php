@@ -9,7 +9,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
             </svg>
         </div>
-        <h2 class="text-2xl font-bold tracking-tight text-white uppercase">Ngarama Secondary School</h2>
+        <h2 class="text-2xl font-bold tracking-tight text-white uppercase">Ngarama Girl's Secondary School</h2>
         <p class="text-indigo-400 font-semibold text-sm tracking-wider uppercase mt-1">Report System</p>
         <p class="text-slate-400 mt-3 text-sm">Sign in to your account</p>
     </div>
