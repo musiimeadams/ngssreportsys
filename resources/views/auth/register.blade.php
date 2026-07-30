@@ -4,10 +4,8 @@
 <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-8 shadow-2xl shadow-slate-950/50">
     <!-- Header -->
     <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl mb-4 text-indigo-400">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-            </svg>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/5 border border-slate-800 rounded-2xl mb-4 overflow-hidden p-1.5">
+            <img src="{{ asset('images/logo.png') }}" alt="School Badge" class="w-full h-full object-contain">
         </div>
         <h2 class="text-2xl font-bold tracking-tight text-white uppercase">Ngarama Girl's Secondary School</h2>
         <p class="text-indigo-400 font-semibold text-sm tracking-wider uppercase mt-1">Report System</p>

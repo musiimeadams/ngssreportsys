@@ -33,10 +33,8 @@
     <aside class="w-full md:w-64 bg-slate-900/60 backdrop-blur-xl border-r border-slate-800/80 flex flex-col shrink-0">
         <!-- Brand Header -->
         <div class="p-6 border-b border-slate-800/80 flex items-center gap-3">
-            <div class="w-10 h-10 bg-indigo-600/10 border border-indigo-500/30 rounded-xl flex items-center justify-center text-indigo-400">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-                </svg>
+            <div class="w-10 h-10 bg-white/5 border border-slate-800 rounded-xl flex items-center justify-center overflow-hidden p-1">
+                <img src="{{ asset('images/logo.png') }}" alt="School Badge" class="w-full h-full object-contain">
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-tight text-white leading-none">NGSS Reports</h1>
