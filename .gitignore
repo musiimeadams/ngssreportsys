@@ -27,3 +27,9 @@ Thumbs.db
 /desktop-app/dist
 /desktop-app/node_modules
 /desktop-app/out
+
+# Database migration files
+/import_to_supabase.php
+/export_data.php
+/migration_export.sql
+
