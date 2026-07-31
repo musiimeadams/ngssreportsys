@@ -34,7 +34,7 @@ Route::get('/test-session', function () {
 
 Route::get('/test-login', function () {
     try {
-        return view('auth.login');
+        return view('auth.login')->render();
     } catch (\Throwable $e) {
         return "VIEW ERROR: " . $e->getMessage() . "\nFILE: " . $e->getFile() . "\nLINE: " . $e->getLine() . "\nTRACE:\n" . $e->getTraceAsString();
     }
