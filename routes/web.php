@@ -40,6 +40,10 @@ Route::get('/test-login', function () {
     }
 });
 
+Route::get('/test-env', function () {
+    return "SESSION_DRIVER: " . config('session.driver') . "\nAPP_ENV: " . config('app.env') . "\nAPP_DEBUG: " . (config('app.debug') ? 'true' : 'false') . "\nDB_CONNECTION: " . config('database.default');
+});
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
