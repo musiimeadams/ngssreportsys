@@ -32,6 +32,14 @@ Route::get('/test-session', function () {
     }
 });
 
+Route::get('/test-login', function () {
+    try {
+        return view('auth.login');
+    } catch (\Exception $e) {
+        return "VIEW ERROR: " . $e->getMessage() . "\nFILE: " . $e->getFile() . "\nLINE: " . $e->getLine() . "\nTRACE:\n" . $e->getTraceAsString();
+    }
+});
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
