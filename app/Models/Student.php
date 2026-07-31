@@ -42,6 +42,16 @@ class Student extends Model
         return $this->hasMany(ReportCard::class);
     }
 
+    public function optionalSubjects()
+    {
+        return $this->belongsToMany(Subject::class, 'optional_subject_registrations');
+    }
+
+    public function isRegisteredForSubject($subjectId)
+    {
+        return $this->optionalSubjects()->where('subject_id', $subjectId)->exists();
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";

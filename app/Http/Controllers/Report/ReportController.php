@@ -43,19 +43,38 @@ class ReportController extends Controller
                 ->where('status', 'active')
                 ->get();
 
-            // Calculate student aggregates dynamically
+            // Calculate student aggregates dynamically - eager load marks and report cards
+            $allMarks = Mark::with('subject')
+                ->whereIn('student_id', $students->pluck('id'))
+                ->where('term_id', $activeTerm->id)
+                ->get()
+                ->groupBy('student_id');
+
+            $allReportCards = ReportCard::whereIn('student_id', $students->pluck('id'))
+                ->where('term_id', $activeTerm->id)
+                ->get()
+                ->keyBy('student_id');
+
+            $isClassS3S4 = $selectedClass->isSeniorThreeOrFour();
+
             foreach ($students as $student) {
-                $marks = Mark::where('student_id', $student->id)
-                    ->where('term_id', $activeTerm->id)
-                    ->get();
+                $marks = $allMarks->get($student->id, collect());
+                
+                if ($isClassS3S4) {
+                    $registeredIds = $student->optionalSubjects()->pluck('subjects.id')->toArray();
+                    $marks = $marks->filter(function($m) use ($registeredIds) {
+                        if ($m->subject->isOptional()) {
+                            return in_array($m->subject_id, $registeredIds);
+                        }
+                        return true;
+                    });
+                }
 
                 $student->marks_count = $marks->count();
                 $student->total_score = $marks->sum('total_score');
                 $student->average_score = $student->marks_count > 0 ? ($student->total_score / $student->marks_count) : 0;
                 
-                $student->reportCard = ReportCard::where('student_id', $student->id)
-                    ->where('term_id', $activeTerm->id)
-                    ->first();
+                $student->reportCard = $allReportCards->get($student->id);
             }
 
             // Rank students by average score descending
@@ -86,14 +105,32 @@ class ReportController extends Controller
             ->where('term_id', $activeTerm->id)
             ->first();
 
-        // Calculate rankings in class dynamically
+        // Calculate rankings in class dynamically - eager load class marks to optimize
         $allStudentsInClass = Student::where('school_class_id', $student->school_class_id)
             ->where('status', 'active')
             ->get();
 
+        $isClassS3S4 = $student->schoolClass->isSeniorThreeOrFour();
+
+        // Eager load all class marks to avoid N+1 query loops
+        $allClassMarks = Mark::with('subject')
+            ->whereIn('student_id', $allStudentsInClass->pluck('id'))
+            ->where('term_id', $activeTerm->id)
+            ->get()
+            ->groupBy('student_id');
+
         $rankings = [];
         foreach ($allStudentsInClass as $s) {
-            $sMarks = Mark::where('student_id', $s->id)->where('term_id', $activeTerm->id)->get();
+            $sMarks = $allClassMarks->get($s->id, collect());
+            if ($isClassS3S4) {
+                $registeredIds = $s->optionalSubjects()->pluck('subjects.id')->toArray();
+                $sMarks = $sMarks->filter(function($m) use ($registeredIds) {
+                    if ($m->subject->isOptional()) {
+                        return in_array($m->subject_id, $registeredIds);
+                    }
+                    return true;
+                });
+            }
             $sAverage = $sMarks->count() > 0 ? ($sMarks->sum('total_score') / $sMarks->count()) : 0;
             $rankings[$s->id] = $sAverage;
         }
@@ -109,6 +146,17 @@ class ReportController extends Controller
             $position++;
         }
 
+        // Filter the student's own marks for display
+        if ($isClassS3S4) {
+            $registeredIds = $student->optionalSubjects()->pluck('subjects.id')->toArray();
+            $marks = $marks->filter(function($m) use ($registeredIds) {
+                if ($m->subject->isOptional()) {
+                    return in_array($m->subject_id, $registeredIds);
+                }
+                return true;
+            });
+        }
+
         $schoolSetting = SchoolSetting::first() ?? new SchoolSetting();
         $overallAverage = $marks->count() > 0 ? round($marks->avg('level_of_achievement'), 1) : 0.0;
 
@@ -117,7 +165,6 @@ class ReportController extends Controller
 
     public function printStream($classId)
     {
-        // Keep the route method name printStream but bind it to classId to avoid changing too many files
         $activeTerm = Term::where('is_active', true)->first();
         if (!$activeTerm) {
             abort(404, 'No active term set.');
@@ -125,27 +172,43 @@ class ReportController extends Controller
 
         $schoolClass = SchoolClass::findOrFail($classId);
         $students = Student::where('school_class_id', $schoolClass->id)->where('status', 'active')->get();
+        $isClassS3S4 = $schoolClass->isSeniorThreeOrFour();
 
-        // Load all mark records and comments for the class
+        // Eager load all class marks and report cards to optimize
+        $allMarks = Mark::with(['subject', 'teacher'])
+            ->whereIn('student_id', $students->pluck('id'))
+            ->where('term_id', $activeTerm->id)
+            ->get()
+            ->groupBy('student_id');
+
+        $allReportCards = ReportCard::whereIn('student_id', $students->pluck('id'))
+            ->where('term_id', $activeTerm->id)
+            ->get()
+            ->keyBy('student_id');
+
+        // Compute averages and rankings
+        $rankings = [];
         foreach ($students as $student) {
-            $student->marks = Mark::with(['subject', 'teacher'])
-                ->where('student_id', $student->id)
-                ->where('term_id', $activeTerm->id)
-                ->get();
-
-            $student->reportCard = ReportCard::where('student_id', $student->id)
-                ->where('term_id', $activeTerm->id)
-                ->first();
-
-            // Calculate rankings dynamically
-            $allStudentsInClass = Student::where('school_class_id', $student->school_class_id)->where('status', 'active')->get();
-            $rankings = [];
-            foreach ($allStudentsInClass as $s) {
-                $sMarks = Mark::where('student_id', $s->id)->where('term_id', $activeTerm->id)->get();
-                $sAverage = $sMarks->count() > 0 ? ($sMarks->sum('total_score') / $sMarks->count()) : 0;
-                $rankings[$s->id] = $sAverage;
+            $sMarks = $allMarks->get($student->id, collect());
+            if ($isClassS3S4) {
+                $registeredIds = $student->optionalSubjects()->pluck('subjects.id')->toArray();
+                $sMarks = $sMarks->filter(function($m) use ($registeredIds) {
+                    if ($m->subject->isOptional()) {
+                        return in_array($m->subject_id, $registeredIds);
+                    }
+                    return true;
+                });
             }
-            arsort($rankings);
+            $student->filtered_marks = $sMarks;
+            $student->average_score = $sMarks->count() > 0 ? ($sMarks->sum('total_score') / $sMarks->count()) : 0;
+            $rankings[$student->id] = $student->average_score;
+            
+            $student->reportCard = $allReportCards->get($student->id);
+        }
+        
+        arsort($rankings);
+
+        foreach ($students as $student) {
             $position = 1;
             foreach ($rankings as $sId => $avg) {
                 if ($sId == $student->id) {
@@ -155,7 +218,7 @@ class ReportController extends Controller
                 $position++;
             }
 
-            // Compute overall average
+            $student->marks = $student->filtered_marks;
             $student->overall_average = $student->marks->count() > 0 ? round($student->marks->avg('level_of_achievement'), 1) : 0.0;
         }
 

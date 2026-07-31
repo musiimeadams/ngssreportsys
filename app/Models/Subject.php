@@ -11,6 +11,13 @@ class Subject extends Model
 
     protected $fillable = ['name', 'code', 'category'];
 
+    const OPTIONAL_SUBJECT_CODES = ['CRE', 'ICT', 'AGR', 'RUN', 'IPS', 'ENT', 'KIS'];
+
+    public function isOptional()
+    {
+        return in_array(strtoupper($this->code), self::OPTIONAL_SUBJECT_CODES);
+    }
+
     public function allocations()
     {
         return $this->hasMany(SubjectAllocation::class);

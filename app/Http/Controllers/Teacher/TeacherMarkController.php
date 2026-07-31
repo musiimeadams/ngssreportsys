@@ -45,17 +45,29 @@ class TeacherMarkController extends Controller
 
         $students = collect();
         if ($selectedAllocation) {
-            // Get all students enrolled in the allocated class
-            $students = Student::where('school_class_id', $selectedAllocation->school_class_id)
-                ->where('status', 'active')
-                ->get();
+            $isClassS3S4 = $selectedAllocation->schoolClass->isSeniorThreeOrFour();
+            $isSubjectOptional = $selectedAllocation->subject->isOptional();
 
-            // Load existing marks
+            $studentsQuery = Student::where('school_class_id', $selectedAllocation->school_class_id)
+                ->where('status', 'active');
+
+            if ($isClassS3S4 && $isSubjectOptional) {
+                $studentsQuery->whereHas('optionalSubjects', function ($q) use ($selectedAllocation) {
+                    $q->where('subject_id', $selectedAllocation->subject_id);
+                });
+            }
+
+            $students = $studentsQuery->get();
+
+            // Eager load existing marks in one query (N+1 query fix)
+            $marks = Mark::whereIn('student_id', $students->pluck('id'))
+                ->where('subject_id', $selectedAllocation->subject_id)
+                ->where('term_id', $activeTerm->id)
+                ->get()
+                ->keyBy('student_id');
+
             foreach ($students as $student) {
-                $student->mark = Mark::where('student_id', $student->id)
-                    ->where('subject_id', $selectedAllocation->subject_id)
-                    ->where('term_id', $activeTerm->id)
-                    ->first();
+                $student->mark = $marks->get($student->id);
             }
         }
 
@@ -66,7 +78,7 @@ class TeacherMarkController extends Controller
     {
         $request->validate([
             'allocation_id' => 'required|exists:subject_allocations,id',
-            'scores' => 'required|array',
+            'scores' => 'nullable|array',
             'scores.*.student_id' => 'required|exists:students,id',
             'scores.*.formative_score' => 'nullable|numeric|min:0|max:20',
             'scores.*.summative_score' => 'nullable|numeric|min:0|max:80',
@@ -81,30 +93,32 @@ class TeacherMarkController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        foreach ($request->scores as $scoreData) {
-            $processed = ReportProcessingService::processScore(
-                $scoreData['formative_score'] !== '' ? (float) $scoreData['formative_score'] : null,
-                $scoreData['summative_score'] !== '' ? (float) $scoreData['summative_score'] : null
-            );
+        if ($request->has('scores') && is_array($request->scores)) {
+            foreach ($request->scores as $scoreData) {
+                $processed = ReportProcessingService::processScore(
+                    $scoreData['formative_score'] !== null && $scoreData['formative_score'] !== '' ? (float) $scoreData['formative_score'] : null,
+                    $scoreData['summative_score'] !== null && $scoreData['summative_score'] !== '' ? (float) $scoreData['summative_score'] : null
+                );
 
-            Mark::updateOrCreate(
-                [
-                    'student_id' => $scoreData['student_id'],
-                    'subject_id' => $allocation->subject_id,
-                    'term_id' => $allocation->term_id,
-                ],
-                [
-                    'teacher_id' => $teacher->id,
-                    'formative_score' => $scoreData['formative_score'] !== '' ? $scoreData['formative_score'] : null,
-                    'summative_score' => $scoreData['summative_score'] !== '' ? $scoreData['summative_score'] : null,
-                    'total_score' => $processed['total_score'],
-                    'grade' => $processed['grade'],
-                    'level_of_achievement' => $processed['achievement'],
-                    'identifier' => $processed['identifier'],
-                    'descriptor' => $processed['descriptor'],
-                    'teacher_comment' => $scoreData['teacher_comment'] ?? null,
-                ]
-            );
+                Mark::updateOrCreate(
+                    [
+                        'student_id' => $scoreData['student_id'],
+                        'subject_id' => $allocation->subject_id,
+                        'term_id' => $allocation->term_id,
+                    ],
+                    [
+                        'teacher_id' => $teacher->id,
+                        'formative_score' => $scoreData['formative_score'] !== null && $scoreData['formative_score'] !== '' ? $scoreData['formative_score'] : null,
+                        'summative_score' => $scoreData['summative_score'] !== null && $scoreData['summative_score'] !== '' ? $scoreData['summative_score'] : null,
+                        'total_score' => $processed['total_score'],
+                        'grade' => $processed['grade'],
+                        'level_of_achievement' => $processed['achievement'],
+                        'identifier' => $processed['identifier'],
+                        'descriptor' => $processed['descriptor'],
+                        'teacher_comment' => $scoreData['teacher_comment'] ?? null,
+                    ]
+                );
+            }
         }
 
         return redirect()->route('teacher.marks.index', ['allocation_id' => $allocation->id])

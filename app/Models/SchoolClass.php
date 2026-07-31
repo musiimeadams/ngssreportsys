@@ -11,6 +11,11 @@ class SchoolClass extends Model
 
     protected $fillable = ['name', 'code'];
 
+    public function isSeniorThreeOrFour()
+    {
+        return in_array(strtoupper($this->code), ['S3', 'S4']);
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class);

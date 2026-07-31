@@ -56,6 +56,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
         Route::post('/users/bulk-delete', [AdminController::class, 'bulkDestroyUsers'])->name('users.bulk_destroy');
 
+        // Optional Subjects Registrations
+        Route::get('/optional-subjects', [AdminController::class, 'optionalSubjects'])->name('optional_subjects.index');
+        Route::post('/optional-subjects', [AdminController::class, 'storeOptionalSubjects'])->name('optional_subjects.store');
+
         Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
         Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
 

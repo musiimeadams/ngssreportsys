@@ -133,6 +133,13 @@
                     </svg>
                     Allocations
                 </a>
+                <a href="{{ route('admin.optional_subjects.index') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-200 {{ request()->routeIs('admin.optional_subjects.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.67 2.67 0 0 0 21 17.25l-5.83-5.83m0 0a2.67 2.67 0 0 1-3.75-3.75L17.25 3A2.67 2.67 0 0 0 13.5 6.75l-5.83 5.83m0 0a2.67 2.67 0 0 1-3.75-3.75L9.75 3A2.67 2.67 0 0 0 6 6.75L3 9.75a2.67 2.67 0 0 0 0 3.75Z" />
+                    </svg>
+                    Optional Subjects
+                </a>
                 <a href="{{ route('admin.years.index') }}" 
                     class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-200 {{ request()->routeIs('admin.years.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">

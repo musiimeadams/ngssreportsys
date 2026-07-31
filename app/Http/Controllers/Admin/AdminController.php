@@ -643,4 +643,73 @@ class AdminController extends Controller
 
         return back()->with('success', "Password for {$user->name} has been reset successfully to '{$request->password}'.");
     }
+
+    public function optionalSubjects(Request $request)
+    {
+        $classes = SchoolClass::whereIn('code', ['S3', 'S4'])->get();
+        $subjects = Subject::whereIn('code', Subject::OPTIONAL_SUBJECT_CODES)->get();
+
+        $selectedClassId = $request->input('class_id');
+        $selectedSubjectId = $request->input('subject_id');
+
+        $students = collect();
+        $selectedClass = null;
+        $selectedSubject = null;
+
+        if ($selectedClassId && $selectedSubjectId) {
+            $selectedClass = SchoolClass::findOrFail($selectedClassId);
+            $selectedSubject = Subject::findOrFail($selectedSubjectId);
+
+            $students = Student::where('school_class_id', $selectedClassId)
+                ->where('status', 'active')
+                ->get();
+        }
+
+        return view('admin.optional_subjects', compact(
+            'classes',
+            'subjects',
+            'selectedClassId',
+            'selectedSubjectId',
+            'selectedClass',
+            'selectedSubject',
+            'students'
+        ));
+    }
+
+    public function storeOptionalSubjects(Request $request)
+    {
+        $request->validate([
+            'class_id' => 'required|exists:school_classes,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'student_ids' => 'nullable|array',
+            'student_ids.*' => 'exists:students,id',
+        ]);
+
+        $classId = $request->class_id;
+        $subjectId = $request->subject_id;
+        $registeredStudentIds = $request->input('student_ids', []);
+
+        $allClassStudentIds = Student::where('school_class_id', $classId)
+            ->where('status', 'active')
+            ->pluck('id')
+            ->toArray();
+
+        \DB::table('optional_subject_registrations')
+            ->where('subject_id', $subjectId)
+            ->whereIn('student_id', $allClassStudentIds)
+            ->whereNotIn('student_id', $registeredStudentIds)
+            ->delete();
+
+        foreach ($registeredStudentIds as $studentId) {
+            \DB::table('optional_subject_registrations')->insertOrIgnore([
+                'student_id' => $studentId,
+                'subject_id' => $subjectId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return back()->with('success', 'Optional subject registrations updated successfully.');
+    }
 }
+
