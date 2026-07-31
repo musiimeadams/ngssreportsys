@@ -13,37 +13,6 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-// Debug / Test Routes
-Route::get('/test-db', function () {
-    try {
-        \DB::connection()->getPdo();
-        return "Database Connection OK! Database name: " . \DB::connection()->getDatabaseName();
-    } catch (\Throwable $e) {
-        return "DB CONNECTION ERROR: " . $e->getMessage();
-    }
-});
-
-Route::get('/test-session', function () {
-    try {
-        session()->put('test_key', 'test_value');
-        return "Session Write OK! test_key=" . session()->get('test_key');
-    } catch (\Throwable $e) {
-        return "SESSION ERROR: " . $e->getMessage();
-    }
-});
-
-Route::get('/test-login', function () {
-    try {
-        return view('auth.login')->render();
-    } catch (\Throwable $e) {
-        return "VIEW ERROR: " . $e->getMessage() . "\nFILE: " . $e->getFile() . "\nLINE: " . $e->getLine() . "\nTRACE:\n" . $e->getTraceAsString();
-    }
-});
-
-Route::get('/test-env', function () {
-    return "SESSION_DRIVER: " . config('session.driver') . "\nAPP_ENV: " . config('app.env') . "\nAPP_DEBUG: " . (config('app.debug') ? 'true' : 'false') . "\nDB_CONNECTION: " . config('database.default');
-});
-
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
