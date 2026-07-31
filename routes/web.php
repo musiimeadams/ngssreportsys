@@ -18,7 +18,7 @@ Route::get('/test-db', function () {
     try {
         \DB::connection()->getPdo();
         return "Database Connection OK! Database name: " . \DB::connection()->getDatabaseName();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         return "DB CONNECTION ERROR: " . $e->getMessage();
     }
 });
@@ -27,7 +27,7 @@ Route::get('/test-session', function () {
     try {
         session()->put('test_key', 'test_value');
         return "Session Write OK! test_key=" . session()->get('test_key');
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         return "SESSION ERROR: " . $e->getMessage();
     }
 });
@@ -35,7 +35,7 @@ Route::get('/test-session', function () {
 Route::get('/test-login', function () {
     try {
         return view('auth.login');
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         return "VIEW ERROR: " . $e->getMessage() . "\nFILE: " . $e->getFile() . "\nLINE: " . $e->getLine() . "\nTRACE:\n" . $e->getTraceAsString();
     }
 });
