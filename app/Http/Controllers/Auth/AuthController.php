@@ -72,10 +72,10 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'role' => $request->role,
             'password' => Hash::make($request->password),
-            'is_active' => false, // false for administrator approval control
+            'is_active' => true,
         ]);
 
-        return redirect()->route('login')->with('success', 'Registration submitted successfully! Your account is pending administrator approval. Please contact the administrator to activate your account.');
+        return redirect()->route('login')->with('success', 'Registration successful! You can now log in to your account.');
     }
 
     public function logout(Request $request)
