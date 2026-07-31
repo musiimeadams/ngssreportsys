@@ -13,6 +13,25 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+// Debug / Test Routes
+Route::get('/test-db', function () {
+    try {
+        \DB::connection()->getPdo();
+        return "Database Connection OK! Database name: " . \DB::connection()->getDatabaseName();
+    } catch (\Exception $e) {
+        return "DB CONNECTION ERROR: " . $e->getMessage();
+    }
+});
+
+Route::get('/test-session', function () {
+    try {
+        session()->put('test_key', 'test_value');
+        return "Session Write OK! test_key=" . session()->get('test_key');
+    } catch (\Exception $e) {
+        return "SESSION ERROR: " . $e->getMessage();
+    }
+});
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
