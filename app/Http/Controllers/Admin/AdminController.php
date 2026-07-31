@@ -651,38 +651,53 @@ class AdminController extends Controller
 
         $selectedClassId = $request->input('class_id');
         $selectedSubjectId = $request->input('subject_id');
+        $selectedStudentId = $request->input('student_id');
 
         $students = collect();
+        $classStudents = collect();
         $selectedClass = null;
         $selectedSubject = null;
+        $selectedStudent = null;
         $registrationsGrid = [];
+        $studentRegisteredSubjectIds = [];
 
-        if ($selectedClassId && $selectedSubjectId) {
+        if ($selectedClassId) {
             $selectedClass = SchoolClass::findOrFail($selectedClassId);
 
-            $students = Student::where('school_class_id', $selectedClassId)
+            $classStudents = Student::where('school_class_id', $selectedClassId)
                 ->where('status', 'active')
                 ->orderBy('first_name')
                 ->orderBy('last_name')
                 ->get();
 
-            if ($selectedSubjectId === 'all') {
-                $selectedSubject = (object)[
-                    'id' => 'all',
-                    'name' => 'All Optional Subjects',
-                    'code' => 'ALL'
-                ];
+            if ($selectedStudentId) {
+                $selectedStudent = Student::findOrFail($selectedStudentId);
 
-                $registrationsGrid = \DB::table('optional_subject_registrations')
-                    ->whereIn('student_id', $students->pluck('id'))
-                    ->get()
-                    ->groupBy('student_id')
-                    ->map(function ($items) {
-                        return $items->pluck('subject_id')->toArray();
-                    })
+                $studentRegisteredSubjectIds = \DB::table('optional_subject_registrations')
+                    ->where('student_id', $selectedStudentId)
+                    ->pluck('subject_id')
                     ->toArray();
-            } else {
-                $selectedSubject = Subject::findOrFail($selectedSubjectId);
+            } elseif ($selectedSubjectId) {
+                $students = $classStudents;
+
+                if ($selectedSubjectId === 'all') {
+                    $selectedSubject = (object)[
+                        'id' => 'all',
+                        'name' => 'All Optional Subjects',
+                        'code' => 'ALL'
+                    ];
+
+                    $registrationsGrid = \DB::table('optional_subject_registrations')
+                        ->whereIn('student_id', $students->pluck('id'))
+                        ->get()
+                        ->groupBy('student_id')
+                        ->map(function ($items) {
+                            return $items->pluck('subject_id')->toArray();
+                        })
+                        ->toArray();
+                } else {
+                    $selectedSubject = Subject::findOrFail($selectedSubjectId);
+                }
             }
         }
 
@@ -691,10 +706,14 @@ class AdminController extends Controller
             'subjects',
             'selectedClassId',
             'selectedSubjectId',
+            'selectedStudentId',
             'selectedClass',
             'selectedSubject',
+            'selectedStudent',
             'students',
-            'registrationsGrid'
+            'classStudents',
+            'registrationsGrid',
+            'studentRegisteredSubjectIds'
         ));
     }
 
@@ -702,18 +721,48 @@ class AdminController extends Controller
     {
         $request->validate([
             'class_id' => 'required|exists:school_classes,id',
-            'subject_id' => 'required|string',
         ]);
 
         $classId = $request->class_id;
-        $subjectId = $request->subject_id;
+        $studentId = $request->input('student_id');
+        $subjectId = $request->input('subject_id');
 
         $allClassStudentIds = Student::where('school_class_id', $classId)
             ->where('status', 'active')
             ->pluck('id')
             ->toArray();
 
-        if ($subjectId === 'all') {
+        if ($studentId) {
+            $request->validate([
+                'student_id' => 'exists:students,id',
+                'subject_ids' => 'nullable|array',
+                'subject_ids.*' => 'exists:subjects,id',
+            ]);
+
+            if (!in_array($studentId, $allClassStudentIds)) {
+                abort(403, 'Unauthorized student modification.');
+            }
+
+            $selectedSubjectIds = $request->input('subject_ids', []);
+
+            \DB::table('optional_subject_registrations')
+                ->where('student_id', $studentId)
+                ->delete();
+
+            $insertData = [];
+            foreach ($selectedSubjectIds as $subId) {
+                $insertData[] = [
+                    'student_id' => $studentId,
+                    'subject_id' => $subId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            if (!empty($insertData)) {
+                \DB::table('optional_subject_registrations')->insert($insertData);
+            }
+        } elseif ($subjectId === 'all') {
             $registrations = $request->input('registrations', []);
 
             \DB::table('optional_subject_registrations')
@@ -721,11 +770,11 @@ class AdminController extends Controller
                 ->delete();
 
             $insertData = [];
-            foreach ($registrations as $studentId => $subjectIds) {
-                if (!in_array($studentId, $allClassStudentIds)) continue;
+            foreach ($registrations as $stId => $subjectIds) {
+                if (!in_array($stId, $allClassStudentIds)) continue;
                 foreach ($subjectIds as $subId) {
                     $insertData[] = [
-                        'student_id' => $studentId,
+                        'student_id' => $stId,
                         'subject_id' => $subId,
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -740,7 +789,7 @@ class AdminController extends Controller
             }
         } else {
             $request->validate([
-                'subject_id' => 'exists:subjects,id',
+                'subject_id' => 'required|exists:subjects,id',
                 'student_ids' => 'nullable|array',
                 'student_ids.*' => 'exists:students,id',
             ]);
@@ -753,9 +802,9 @@ class AdminController extends Controller
                 ->whereNotIn('student_id', $registeredStudentIds)
                 ->delete();
 
-            foreach ($registeredStudentIds as $studentId) {
+            foreach ($registeredStudentIds as $stId) {
                 \DB::table('optional_subject_registrations')->insertOrIgnore([
-                    'student_id' => $studentId,
+                    'student_id' => $stId,
                     'subject_id' => $subjectId,
                     'created_at' => now(),
                     'updated_at' => now(),
