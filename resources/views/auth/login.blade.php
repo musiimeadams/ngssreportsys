@@ -67,6 +67,41 @@
         <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 font-medium transition duration-200">Sign up here</a>
     </div>
 
+    @if(config('app.env') !== 'production')
+        <!-- Database Mode Switcher (Local Desktop Only) -->
+        <div class="mt-6 p-4 bg-slate-950/40 border border-slate-800/60 rounded-2xl text-center space-y-2">
+            <div class="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <span class="inline-block w-2 h-2 rounded-full {{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500' }}"></span>
+                Database Mode: 
+                <span class="{{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold' }}">
+                    {{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'Cloud (Online)' : 'Local (Offline)' }}
+                </span>
+            </div>
+            
+            <button type="button" onclick="toggleDatabaseMode()" 
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-indigo-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Switch to {{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'Local (Offline)' : 'Cloud (Online)' }}
+            </button>
+        </div>
+
+        <script>
+        function toggleDatabaseMode() {
+            const currentMode = document.cookie.split('; ').find(row => row.startsWith('db_mode='))?.split('=')[1] || 'offline';
+            const newMode = currentMode === 'online' ? 'offline' : 'online';
+            
+            // Set cookie for 30 days
+            const d = new Date();
+            d.setTime(d.getTime() + (30*24*60*60*1000));
+            document.cookie = "db_mode=" + newMode + ";expires=" + d.toUTCString() + ";path=/";
+            
+            window.location.reload();
+        }
+        </script>
+    @endif
+
     <!-- Developer Credits -->
     <div class="mt-4 text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest">
         Developed by MUSIIME ADAMZ

@@ -179,6 +179,16 @@
             </div>
         </div>
 
+        @if(config('app.env') !== 'production')
+            <div class="px-4 py-2 border-t border-slate-800/40 bg-slate-950/20 text-center flex items-center justify-center gap-2 text-[10px] uppercase font-bold tracking-wider">
+                <span class="inline-block w-1.5 h-1.5 rounded-full {{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500' }}"></span>
+                Database: 
+                <span class="{{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'text-emerald-400' : 'text-amber-400' }}">
+                    {{ (isset($_COOKIE['db_mode']) && $_COOKIE['db_mode'] === 'online') ? 'Cloud (Online)' : 'Local (Offline)' }}
+                </span>
+            </div>
+        @endif
+
         <!-- Developer Credits -->
         <div class="py-2.5 px-4 text-center border-t border-slate-800/20 bg-slate-950/60">
             <span class="text-[9px] font-bold text-slate-500 tracking-widest uppercase block">Developed by MUSIIME ADAMZ</span>
