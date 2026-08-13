@@ -54,9 +54,9 @@
                 background: transparent !important;
                 padding: 8px 30px !important; /* space for left/right borders */
                 box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
-                max-width: 100% !important;
+                margin: 0 auto !important;
+                width: 194mm !important;
+                max-width: 194mm !important;
                 height: 278mm !important;
                 max-height: 278mm !important;
                 box-sizing: border-box !important;
