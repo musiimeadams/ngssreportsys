@@ -349,7 +349,7 @@
                                         <td class="py-2.5 px-3 text-center border-r border-slate-800 font-bold mono-font text-sm text-white">{{ $m->total_score !== null ? round($m->total_score) : '' }}</td>
                                         <td class="py-2.5 px-3 text-center border-r border-slate-800 font-bold text-sm text-indigo-400 uppercase">{{ $m->grade ?? '-' }}</td>
                                         <td class="py-2.5 px-3 text-center border-r border-slate-800 font-bold mono-font text-sm">{{ $m->level_of_achievement !== null ? number_format($m->level_of_achievement, 1) : '-' }}</td>
-                                        <td class="py-2.5 px-3 text-center font-bold text-slate-500 uppercase">{{ isset($m->teacher->name) ? implode('', array_map(function($w) { return strtoupper($w[0] ?? ''); }, array_filter(explode(' ', $m->teacher->name)))) : 'TR' }}</td>
+                                        <td class="py-2.5 px-3 text-center font-bold text-slate-500 uppercase">{{ isset($m->teacher->name) ? (count($parts = array_filter(explode(' ', $m->teacher->name))) > 1 ? reset($parts) . ' ' . end($parts) : reset($parts)) : 'TR' }}</td>
                                     </tr>
                                 @endforeach
                                 <!-- Overall Average Row -->
