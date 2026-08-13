@@ -130,19 +130,27 @@
             }
             /* Header adjustments */
             .w-28.h-28 {
-                width: 48px !important;
-                height: 48px !important;
+                width: 65px !important;
+                height: 65px !important;
             }
             .w-28.h-28 img {
-                width: 40px !important;
-                height: 40px !important;
+                width: 56px !important;
+                height: 56px !important;
             }
             .report-header.text-3xl {
-                font-size: 1.05rem !important;
+                font-size: 1.25rem !important;
             }
             .report-header Republic, .report-header .text-sm {
-                font-size: 0.65rem !important;
+                font-size: 0.75rem !important;
                 margin-top: 1px !important;
+            }
+            .flex-1 p.text-slate-400 {
+                font-size: 0.75rem !important;
+                margin-top: 1px !important;
+            }
+            .flex-1 .text-red-500 {
+                font-size: 0.65rem !important;
+                margin-top: 2px !important;
             }
             .pb-6 {
                 padding-bottom: 2px !important;

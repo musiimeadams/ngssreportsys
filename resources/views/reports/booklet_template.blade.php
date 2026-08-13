@@ -177,15 +177,15 @@
                 <!-- School Banner Header -->
                 <table class="school-header-table" style="width: 100%; border-bottom: 2px solid black; padding-bottom: 4px; margin-bottom: 4px;">
                     <tr>
-                        <td style="width: 50px; vertical-align: middle;">
-                            <div class="school-logo" style="border: 1px solid #4b5563; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; overflow: hidden; width: 44px; height: 44px;">
-                                <img src="/images/logo.png" alt="Logo" style="width: 36px; height: 36px;">
+                        <td style="width: 70px; vertical-align: middle;">
+                            <div class="school-logo" style="border: 1px solid #4b5563; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; overflow: hidden; width: 65px; height: 65px;">
+                                <img src="/images/logo.png" alt="Logo" style="width: 56px; height: 56px;">
                             </div>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <h1 class="report-header" style="font-size: 1.05rem; font-weight: 800; margin: 0; text-transform: uppercase; color: black; letter-spacing: 0.02em;">{{ $schoolSetting->school_name }}</h1>
-                            <p style="font-size: 0.65rem; font-weight: 700; margin: 2px 0 0 0; text-transform: uppercase; color: #374151; letter-spacing: 0.05em;">{{ $schoolSetting->address }}</p>
-                            <div style="font-size: 0.55rem; font-weight: bold; margin-top: 3px; color: black;">
+                            <h1 class="report-header" style="font-size: 1.25rem; font-weight: 800; margin: 0; text-transform: uppercase; color: black; letter-spacing: 0.02em;">{{ $schoolSetting->school_name }}</h1>
+                            <p style="font-size: 0.75rem; font-weight: 700; margin: 2px 0 0 0; text-transform: uppercase; color: #374151; letter-spacing: 0.05em;">{{ $schoolSetting->address }}</p>
+                            <div style="font-size: 0.65rem; font-weight: bold; margin-top: 3px; color: black;">
                                 <span style="color: #b91c1c; font-style: italic; margin-right: 15px;">Motto: {{ $schoolSetting->school_motto }}</span>
                                 <span style="color: #b91c1c; font-family: monospace;">Tel: {{ $schoolSetting->phone }}</span>
                             </div>
