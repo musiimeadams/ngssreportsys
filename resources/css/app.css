@@ -8,4 +8,64 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+        
+    /* Light Theme Palette Overrides */
+    --color-slate-950: #f8fafc; /* Page Background (originally very dark slate) */
+    --color-slate-900: #ffffff; /* Card/Panel Background (originally dark slate) */
+    --color-slate-800: #f1f5f9; /* Translucent borders and dividers */
+    --color-slate-700: #cbd5e1; /* Dividers and input borders */
+    --color-slate-600: #94a3b8; /* Placeholders and borders */
+    --color-slate-500: #64748b; /* Inactive text and credits */
+    --color-slate-400: #475569; /* Intermediate text */
+    --color-slate-350: #334155; /* Secondary text */
+    --color-slate-300: #334155; /* Secondary text */
+    --color-slate-200: #1e293b; /* Primary text */
+    --color-slate-100: #0f172a; /* Strong text */
+    
+    /* Enhance Indigo colors for high contrast in light mode */
+    --color-indigo-400: #4f46e5; /* Make light indigo text readable (originally indigo-400) */
+    --color-indigo-300: #4338ca; /* Indigo link hover colors */
+}
+
+/* Global Light Theme Overrides */
+body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+/* Override text-white to be dark when not inside active indigo/colored items */
+.text-white:not(
+    button *, 
+    a.bg-indigo-650 *, 
+    a.bg-indigo-600 *,
+    .bg-indigo-600 *, 
+    .bg-indigo-500 *, 
+    .bg-emerald-600 *, 
+    .bg-emerald-500 *, 
+    .bg-red-600 *, 
+    .bg-red-500 *, 
+    .bg-amber-500 *, 
+    .text-center.py-2\.5.rounded-xl.border *,
+    .black-bar *
+) {
+    color: #0f172a !important;
+}
+
+/* Make sure top-level white text elements are dark */
+h1.text-white, h2.text-white, h3.text-white, h4.text-white {
+    color: #0f172a !important;
+}
+
+/* Aside link hover text color */
+aside nav a:hover {
+    color: #4f46e5 !important;
+}
+
+/* Table styling light mode consistency */
+table th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+table td {
+    color: #334155 !important;
 }

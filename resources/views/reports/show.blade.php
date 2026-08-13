@@ -10,6 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        .leaf-border-svg {
+            display: none !important;
+        }
+        .black-bar {
+            background-color: transparent !important;
+            border: 1px solid #000000 !important;
+        }
+        .black-bar h2, .black-bar h3 {
+            color: #000000 !important;
+        }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -24,6 +34,10 @@
             border: 4px double #475569;
             position: relative;
         }
+        @page {
+            size: A4 portrait;
+            margin: 5mm 6mm;
+        }
         @media print {
             .no-print {
                 display: none !important;
@@ -31,27 +45,50 @@
             body {
                 background-color: white !important;
                 color: black !important;
-                padding: 0;
-                margin: 0;
+                padding: 0 !important;
+                margin: 0 !important;
             }
             .print-container {
-                border: 3px double #000000 !important;
+                border: 2px double #000000 !important;
                 border-radius: 0 !important;
                 background: white !important;
-                padding: 20px !important;
+                padding: 8px 30px !important; /* space for left/right borders */
                 box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 287mm !important; /* A4 height 297mm minus 10mm margins */
+                max-height: 287mm !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                position: relative !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+            }
+            .leaf-border-svg {
+                display: block !important;
             }
             .academic-border {
-                border: 3px double #000000 !important;
+                border: 2px double #000000 !important;
             }
             .text-indigo-400, .text-indigo-300 {
                 color: black !important;
             }
             .text-red-500, .text-red-400 {
-                color: #e11d48 !important; /* Keep red color visible for motto if possible, or black */
+                color: #b91c1c !important; /* Keep red color for motto/phone in print */
             }
             .text-white {
                 color: black !important;
+            }
+            .subject-name {
+                color: #b91c1c !important;
+                font-weight: bold !important;
+                text-transform: uppercase !important;
+            }
+            .score-range {
+                color: #15803d !important;
+                font-family: 'Courier Prime', monospace !important;
             }
             .bg-slate-900, .bg-slate-950, .bg-slate-900\/60, .bg-slate-950\/40, .bg-slate-950\/60 {
                 background-color: white !important;
@@ -63,12 +100,95 @@
             table th, table td {
                 border-color: black !important;
                 color: black !important;
+                padding-top: 2px !important;
+                padding-bottom: 2px !important;
+                padding-left: 4px !important;
+                padding-right: 4px !important;
+                font-size: 0.6rem !important;
             }
             .black-bar {
-                background-color: black !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                background-color: transparent !important;
+                color: black !important;
+                border: 1px solid black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin-top: 3px !important;
+                margin-bottom: 3px !important;
+                padding-top: 1.5px !important;
+                padding-bottom: 1.5px !important;
+            }
+            .black-bar h2, .black-bar h3 {
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .black-bar h2 {
+                font-size: 0.65rem !important;
+            }
+            .black-bar h3 {
+                font-size: 0.6rem !important;
+            }
+            /* Header adjustments */
+            .w-28.h-28 {
+                width: 48px !important;
+                height: 48px !important;
+            }
+            .w-28.h-28 img {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            .report-header.text-3xl {
+                font-size: 1.05rem !important;
+            }
+            .report-header Republic, .report-header .text-sm {
+                font-size: 0.65rem !important;
+                margin-top: 1px !important;
+            }
+            .pb-6 {
+                padding-bottom: 2px !important;
+            }
+            .mb-6 {
+                margin-bottom: 2px !important;
+            }
+            .mb-8 {
+                margin-bottom: 2px !important;
+            }
+            .gap-6 {
+                gap: 6px !important;
+            }
+            /* Student details & photo frame adjustments */
+            .p-5 {
+                padding: 4px 8px !important;
+            }
+            .gap-y-3\.5 {
+                row-gap: 2px !important;
+            }
+            .w-32.h-36 {
+                width: 55px !important;
+                height: 65px !important;
+            }
+            .text-lg {
+                font-size: 0.8rem !important;
+            }
+            /* Remarks section adjustments */
+            .space-y-4 {
+                margin-top: 2px !important;
+                margin-bottom: 2px !important;
+                padding-top: 2px !important;
+            }
+            .space-y-4 > div {
+                font-size: 0.6rem !important;
+                margin-top: 1px !important;
+            }
+            /* Legends table font size */
+            .legend-container {
+                padding: 4px !important;
+                border-radius: 4px !important;
+            }
+            .legend-container table td {
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
+                font-size: 0.55rem !important;
             }
         }
     </style>
@@ -90,7 +210,24 @@
     </div>
 
     <!-- Official Report Card Layout -->
-    <div class="w-full max-w-4xl bg-slate-900/60 border border-slate-800/80 rounded-3xl p-8 md:p-12 shadow-2xl print-container academic-border">
+    <div class="w-full max-w-4xl bg-slate-900/60 border border-slate-800/80 rounded-3xl p-8 md:p-12 shadow-2xl print-container academic-border relative">
+        <!-- Left Leafy Border -->
+        <svg class="leaf-border-svg left-0" style="position: absolute; top: 0; bottom: 0; left: 8px; width: 20px; height: 100%; pointer-events: none; z-index: 10;">
+            <defs>
+                <pattern id="leafPattern-{{ $student->id }}" width="20" height="33" patternUnits="userSpaceOnUse">
+                    <path d="M10,0 L10,33" stroke="black" stroke-width="1.5" />
+                    <path d="M10,15 C5,13 2,9 10,5 C6,9 8,12 10,15" fill="black" />
+                    <circle cx="7" cy="9" r="0.8" fill="white" />
+                    <path d="M10,31 C15,29 18,25 10,21 C14,25 12,28 10,31" fill="black" />
+                    <circle cx="13" cy="25" r="0.8" fill="white" />
+                </pattern>
+            </defs>
+            <rect width="20" height="100%" fill="url(#leafPattern-{{ $student->id }})" />
+        </svg>
+        <!-- Right Leafy Border -->
+        <svg class="leaf-border-svg right-0" style="position: absolute; top: 0; bottom: 0; right: 8px; width: 20px; height: 100%; pointer-events: none; z-index: 10;">
+            <rect width="20" height="100%" fill="url(#leafPattern-{{ $student->id }})" />
+        </svg>
         
         <!-- School Banner Header -->
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b-2 border-slate-800/80 pb-6 mb-6">
@@ -115,7 +252,7 @@
             <div class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-y-3.5 gap-x-6 text-sm bg-slate-950/40 p-5 rounded-2xl border border-slate-800/60 w-full">
                 <div class="col-span-2 md:col-span-3 border-b border-slate-800 pb-2 mb-1">
                     <span class="text-slate-500 text-xs font-semibold uppercase tracking-wider block">NAME OF STUDENT</span>
-                    <span class="text-white font-bold text-lg block mt-0.5 uppercase tracking-wide">{{ $student->full_name }}</span>
+                    <span class="text-white font-bold text-lg block mt-0.5 uppercase tracking-wide">{{ $student->first_name }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $student->last_name }}</span>
                 </div>
                 <div>
                     <span class="text-slate-500 text-xs font-semibold uppercase tracking-wider block">CLASS</span>
@@ -146,8 +283,8 @@
         </div>
 
         <!-- Report Card Title Bar -->
-        <div class="black-bar bg-slate-950 text-center py-2 rounded-xl mb-6 border border-slate-800 shadow-md">
-            <h2 class="text-sm font-black tracking-widest text-white uppercase">END OF TERM PROGRESSIVE ASSESSMENT REPORT</h2>
+        <div class="black-bar text-center py-2 rounded-xl mb-6 border border-slate-800 shadow-md">
+            <h2 class="text-sm font-black tracking-widest uppercase">END OF TERM PROGRESSIVE ASSESSMENT REPORT</h2>
         </div>
 
         <!-- Academic Performance Table -->
@@ -171,7 +308,7 @@
                         <tbody class="divide-y divide-slate-800/80">
                             @foreach($marks as $m)
                                 <tr>
-                                    <td class="py-2.5 px-3 border-r border-slate-800 font-bold text-white uppercase">{{ $m->subject->name }}</td>
+                                    <td class="py-2.5 px-3 border-r border-slate-800 font-bold text-white uppercase subject-name">{{ $m->subject->name }}</td>
                                     <td class="py-2.5 px-3 text-center border-r border-slate-800 font-semibold mono-font text-sm">{{ $m->formative_score !== null ? round($m->formative_score) : '' }}</td>
                                     <td class="py-2.5 px-3 text-center border-r border-slate-800 font-semibold mono-font text-sm">{{ $m->summative_score !== null ? round($m->summative_score) : '' }}</td>
                                     <td class="py-2.5 px-3 text-center border-r border-slate-800 font-bold mono-font text-sm text-white">{{ $m->total_score !== null ? round($m->total_score) : '' }}</td>
@@ -195,7 +332,7 @@
         <!-- Legends Grid Layout -->
         <div class="grid md:grid-cols-5 gap-6 mb-6">
             <!-- Left: Grading Scale (Spans 3 cols) -->
-            <div class="md:col-span-3 border border-slate-800 rounded-xl p-4 bg-slate-950/40 text-[10px]">
+            <div class="md:col-span-3 legend-container border border-slate-800 rounded-xl p-4 bg-slate-950/40 text-[10px]">
                 <table class="w-full text-left text-[9px] text-slate-400">
                     <thead>
                         <tr class="border-b border-slate-800 text-white font-bold uppercase">
@@ -207,50 +344,50 @@
                     <tbody class="divide-y divide-slate-900">
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">A*</td>
-                            <td class="py-1 font-mono">90 - 100</td>
+                            <td class="py-1 font-mono score-range">90 - 100</td>
                             <td class="py-1">Achieved MOST or ALL competencies in the subject exceptionally well</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">A</td>
-                            <td class="py-1 font-mono">80 - 89</td>
+                            <td class="py-1 font-mono score-range">80 - 89</td>
                             <td class="py-1">Achieved MOST or ALL competencies in the subject exceedingly well</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">B</td>
-                            <td class="py-1 font-mono">70 - 79</td>
+                            <td class="py-1 font-mono score-range">70 - 79</td>
                             <td class="py-1">Achieved MOST but not ALL competencies well in the subject</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">C</td>
-                            <td class="py-1 font-mono">60 - 69</td>
+                            <td class="py-1 font-mono score-range">60 - 69</td>
                             <td class="py-1">Achieved a GOOD number of competencies in the subject</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">D</td>
-                            <td class="py-1 font-mono">50 - 59</td>
+                            <td class="py-1 font-mono score-range">50 - 59</td>
                             <td class="py-1">Achieved a BASIC number of competencies in the subject</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">E</td>
-                            <td class="py-1 font-mono">40 - 49</td>
+                            <td class="py-1 font-mono score-range">40 - 49</td>
                             <td class="py-1">Achieved a bear minimum number of competencies in the subject just enough to exhibit the required knowledge and skills</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">F</td>
-                            <td class="py-1 font-mono">30 - 39</td>
+                            <td class="py-1 font-mono score-range">30 - 39</td>
                             <td class="py-1">Achieved a number of competencies but not enough to make her competent in the subject</td>
                         </tr>
                         <tr>
                             <td class="py-1 font-bold text-white font-mono">G</td>
-                            <td class="py-1 font-mono">&lt; 30</td>
-                            <td class="py-1">Achieved very few or no competencies</td>
+                            <td class="py-1 font-mono score-range">&lt; 30</td>
+                            <td class="py-1">Achieved very few or no competencies / below basic</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Right: Identifier (Spans 2 cols) -->
-            <div class="md:col-span-2 border border-slate-800 rounded-xl p-4 bg-slate-950/40 text-[10px]">
+            <div class="md:col-span-2 legend-container border border-slate-800 rounded-xl p-4 bg-slate-950/40 text-[10px]">
                 <table class="w-full text-left text-[9px] text-slate-400">
                     <thead>
                         <tr class="border-b border-slate-800 text-white font-bold uppercase">
@@ -285,7 +422,7 @@
             <div class="flex flex-col md:flex-row md:items-baseline gap-2">
                 <span class="font-bold text-white shrink-0">Class Teacher's comment:</span>
                 <span class="border-b border-dotted border-slate-600 flex-1 text-slate-350 italic py-0.5">
-                    {{ $reportCard->class_teacher_comment ?? 'No remarks provided' }}
+                    &nbsp;
                 </span>
                 <span class="shrink-0 text-slate-500 font-semibold pl-4">sign: __________________</span>
             </div>
@@ -293,15 +430,15 @@
             <div class="flex flex-col md:flex-row md:items-baseline gap-2 pt-2">
                 <span class="font-bold text-white shrink-0">Head teachers' comment:</span>
                 <span class="border-b border-dotted border-slate-600 flex-1 text-slate-350 italic py-0.5">
-                    {{ $reportCard->headteacher_comment ?? 'Steady progress registered. Recommended to maintain this performance.' }}
+                    &nbsp;
                 </span>
                 <span class="shrink-0 text-slate-500 font-semibold pl-4">sign: __________________</span>
             </div>
         </div>
 
         <!-- School Footer / Next term announcement -->
-        <div class="black-bar bg-slate-950 text-center py-2.5 rounded-xl border border-slate-800">
-            <h3 class="text-xs font-black tracking-widest text-indigo-400 uppercase">
+        <div class="black-bar text-center py-2.5 rounded-xl border border-slate-800">
+            <h3 class="text-xs font-black tracking-widest uppercase">
                 NEXT TERM BEGINS ON {{ $schoolSetting->next_term_begins ? $schoolSetting->next_term_begins->format('jS F Y') : '25TH MAY 2026' }}.
             </h3>
         </div>

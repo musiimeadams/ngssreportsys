@@ -89,6 +89,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::get('/{id}', [ReportController::class, 'show'])->name('show');
         Route::get('/stream/{streamId}', [ReportController::class, 'printStream'])->name('print_stream');
+        Route::get('/stream/{streamId}/download-word', [ReportController::class, 'downloadWord'])->name('download_word');
+        Route::get('/stream/{streamId}/download-html', [ReportController::class, 'downloadHtml'])->name('download_html');
     });
 
     Route::post('/students/{id}/photo', [ReportController::class, 'uploadStudentPhoto'])->name('students.photo');

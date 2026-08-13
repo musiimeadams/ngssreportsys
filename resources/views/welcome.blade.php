@@ -12,15 +12,15 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #030712;
-            background-image: radial-gradient(circle at top center, rgba(79, 70, 229, 0.08) 0%, transparent 60%);
+            background-color: #f8fafc;
+            background-image: radial-gradient(circle at top center, rgba(79, 70, 229, 0.05) 0%, transparent 60%);
         }
         .header-title {
             font-family: 'Cinzel', serif;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center p-6 text-slate-100 selection:bg-indigo-600 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between items-center p-6 text-slate-900 selection:bg-indigo-600 selection:text-white">
 
     <!-- Top Spacer -->
     <div></div>

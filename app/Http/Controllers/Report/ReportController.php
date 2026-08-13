@@ -165,6 +165,38 @@ class ReportController extends Controller
 
     public function printStream($classId)
     {
+        $data = $this->getStreamData($classId);
+        return view('reports.print_stream', $data);
+    }
+
+    public function downloadWord($classId)
+    {
+        $data = $this->getStreamData($classId);
+        $html = view('reports.booklet_template', $data)->render();
+        
+        $filename = 'Booklet_' . str_replace(' ', '_', $data['schoolClass']->name) . '_' . date('Y-m-d') . '.doc';
+
+        return response($html, 200)
+            ->header('Content-Type', 'application/vnd.ms-word')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Cache-Control', 'max-age=0, must-revalidate');
+    }
+
+    public function downloadHtml($classId)
+    {
+        $data = $this->getStreamData($classId);
+        $html = view('reports.booklet_template', $data)->render();
+        
+        $filename = 'Booklet_' . str_replace(' ', '_', $data['schoolClass']->name) . '_' . date('Y-m-d') . '.html';
+
+        return response($html, 200)
+            ->header('Content-Type', 'text/html')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Cache-Control', 'max-age=0, must-revalidate');
+    }
+
+    private function getStreamData($classId)
+    {
         $activeTerm = Term::where('is_active', true)->first();
         if (!$activeTerm) {
             abort(404, 'No active term set.');
@@ -224,7 +256,7 @@ class ReportController extends Controller
 
         $schoolSetting = SchoolSetting::first() ?? new SchoolSetting();
 
-        return view('reports.print_stream', compact('schoolClass', 'students', 'activeTerm', 'schoolSetting'));
+        return compact('schoolClass', 'students', 'activeTerm', 'schoolSetting');
     }
 
     public function uploadStudentPhoto($id, Request $request)
