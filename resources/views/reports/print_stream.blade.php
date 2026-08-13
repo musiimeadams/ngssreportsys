@@ -40,7 +40,7 @@
         }
         @page {
             size: A4 portrait;
-            margin: 5mm 6mm;
+            margin: 8mm 8mm !important;
         }
         @media print {
             .no-print {
@@ -61,8 +61,8 @@
                 margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                height: 287mm !important; /* A4 height 297mm minus 10mm margins */
-                max-height: 287mm !important;
+                height: 278mm !important;
+                max-height: 278mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 position: relative !important;
