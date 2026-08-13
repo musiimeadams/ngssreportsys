@@ -51,7 +51,7 @@
             .print-container {
                 border: 2px double #000000 !important;
                 border-radius: 0 !important;
-                background: white !important;
+                background: transparent !important;
                 padding: 8px 30px !important; /* space for left/right borders */
                 box-shadow: none !important;
                 margin: 0 !important;
@@ -418,21 +418,29 @@
         </div>
 
         <!-- Remarks Section -->
-        <div class="space-y-4 mb-8 pt-4 border-t border-slate-800/80 text-xs">
-            <div class="flex flex-col md:flex-row md:items-baseline gap-2">
-                <span class="font-bold text-white shrink-0">Class Teacher's comment:</span>
-                <span class="border-b border-dotted border-slate-600 flex-1 text-slate-350 italic py-0.5">
-                    &nbsp;
-                </span>
-                <span class="shrink-0 text-slate-500 font-semibold pl-4">sign: __________________</span>
+        <div class="space-y-4 mb-6 pt-3 border-t border-slate-800/80 text-xs">
+            <!-- Class Teacher's Comment Box -->
+            <div class="grid grid-cols-4 gap-4">
+                <div class="col-span-3 flex flex-col gap-2">
+                    <span class="font-bold text-white shrink-0">Class Teacher's comment:</span>
+                    <div class="border-b border-dotted border-slate-650 h-5 w-full"></div>
+                    <div class="border-b border-dotted border-slate-650 h-5 w-full"></div>
+                </div>
+                <div class="flex flex-col justify-end items-end pb-0.5">
+                    <span class="text-[10px] text-slate-450 font-semibold">Signature: __________________</span>
+                </div>
             </div>
 
-            <div class="flex flex-col md:flex-row md:items-baseline gap-2 pt-2">
-                <span class="font-bold text-white shrink-0">Head teachers' comment:</span>
-                <span class="border-b border-dotted border-slate-600 flex-1 text-slate-350 italic py-0.5">
-                    &nbsp;
-                </span>
-                <span class="shrink-0 text-slate-500 font-semibold pl-4">sign: __________________</span>
+            <!-- Head Teacher's Comment Box -->
+            <div class="grid grid-cols-4 gap-4 pt-1">
+                <div class="col-span-3 flex flex-col gap-2">
+                    <span class="font-bold text-white shrink-0">Head teachers' comment:</span>
+                    <div class="border-b border-dotted border-slate-650 h-5 w-full"></div>
+                    <div class="border-b border-dotted border-slate-650 h-5 w-full"></div>
+                </div>
+                <div class="flex flex-col justify-end items-end pb-0.5">
+                    <span class="text-[10px] text-slate-450 font-semibold">Signature: __________________</span>
+                </div>
             </div>
         </div>
 

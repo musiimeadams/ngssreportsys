@@ -368,18 +368,30 @@
                 </table>
 
                 <!-- Remarks Section -->
-                <div class="remarks-section">
-                    <div class="remarks-row">
-                        <span class="remarks-label">Class Teacher's comment:</span>
-                        <span class="remarks-line">&nbsp;</span>
-                        <span class="signature-label">sign: __________________</span>
-                    </div>
-                    <div class="remarks-row" style="margin-top: 4px;">
-                        <span class="remarks-label">Head teachers' comment:</span>
-                        <span class="remarks-line">&nbsp;</span>
-                        <span class="signature-label">sign: __________________</span>
-                    </div>
-                </div>
+                <table style="width: 100%; border-top: 1px solid black; margin-top: 4px; border-collapse: collapse; border: none;">
+                    <!-- Class Teacher's Comment Row -->
+                    <tr>
+                        <td style="width: 75%; border: none; padding: 4px 0 2px 0; vertical-align: top;">
+                            <span style="font-weight: bold; font-size: 0.6rem; display: block; margin-bottom: 2px; color: black;">Class Teacher's comment:</span>
+                            <div style="border-bottom: 1px dotted black; height: 16px; width: 100%;"></div>
+                            <div style="border-bottom: 1px dotted black; height: 16px; width: 100%;"></div>
+                        </td>
+                        <td style="width: 25%; border: none; padding: 4px 0 2px 0; text-align: right; vertical-align: bottom; font-size: 0.55rem; color: #4b5563;">
+                            Signature: __________________
+                        </td>
+                    </tr>
+                    <!-- Head Teacher's Comment Row -->
+                    <tr>
+                        <td style="width: 75%; border: none; padding: 6px 0 2px 0; vertical-align: top;">
+                            <span style="font-weight: bold; font-size: 0.6rem; display: block; margin-bottom: 2px; color: black;">Head teachers' comment:</span>
+                            <div style="border-bottom: 1px dotted black; height: 16px; width: 100%;"></div>
+                            <div style="border-bottom: 1px dotted black; height: 16px; width: 100%;"></div>
+                        </td>
+                        <td style="width: 25%; border: none; padding: 6px 0 2px 0; text-align: right; vertical-align: bottom; font-size: 0.55rem; color: #4b5563;">
+                            Signature: __________________
+                        </td>
+                    </tr>
+                </table>
 
                 <!-- School Footer / Next term announcement -->
                 <div class="black-bar" style="margin-top: 4px;">
