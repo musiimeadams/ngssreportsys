@@ -263,7 +263,7 @@
                                         <td class="mono-font" style="padding: 2px 4px; font-size: 0.6rem; text-align: center; font-weight: bold;">{{ $m->total_score !== null ? round($m->total_score) : '' }}</td>
                                         <td style="padding: 2px 4px; font-size: 0.6rem; text-align: center; font-weight: bold; color: black; text-transform: uppercase;">{{ $m->grade ?? '-' }}</td>
                                         <td class="mono-font" style="padding: 2px 4px; font-size: 0.6rem; text-align: center; font-weight: bold;">{{ $m->level_of_achievement !== null ? number_format($m->level_of_achievement, 1) : '-' }}</td>
-                                        <td style="padding: 2px 4px; font-size: 0.6rem; text-align: center; font-weight: bold; color: #4b5563; text-transform: uppercase;">{{ substr($m->teacher?->name ?? 'T', 0, 2) }}</td>
+                                        <td style="padding: 2px 4px; font-size: 0.6rem; text-align: center; font-weight: bold; color: #4b5563; text-transform: uppercase;">{{ isset($m->teacher->name) ? implode('', array_map(function($w) { return strtoupper($w[0] ?? ''); }, array_filter(explode(' ', $m->teacher->name)))) : 'TR' }}</td>
                                     </tr>
                                 @endforeach
                                 <!-- Overall Average Row -->
